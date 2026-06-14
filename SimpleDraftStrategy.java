@@ -7,8 +7,6 @@ public class SimpleDraftStrategy extends AbstractDraftStrategy {
     @Override
     public Player draftPlayer(String me, List<Player> available, Queue<String> draftOrder,
             Map<String, List<Player>> drafted) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'draftPlayer'");
+        return available.get(0);
     }
-    
 }
