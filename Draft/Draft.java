@@ -1,5 +1,5 @@
+package Draft;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +10,9 @@ public class Draft {
     private Queue<Drafter> draftOrder;
     private Map<String, List<Player>> drafted;
 
-    public Draft(Queue<Drafter> draftOrder) {
+    public Draft(Queue<Drafter> draftOrder, List<Player> available) {
         this.draftOrder = draftOrder;
-        this.available = this.importPlayers();
+        this.available = available;
         this.drafted = this.initializeDrafted();
     }
 
@@ -24,13 +24,10 @@ public class Draft {
         return drafted;
     }
 
-    private List<Player> importPlayers() {
-        List<Player> available = new ArrayList<Player>();
-        available.sort(Comparator.comparing(Player::getProjection));
-        return available;
-    }
-    
     public Boolean play(int rounds) {
+        for (Drafter d : this.draftOrder) {
+            d.reset();
+        }
         for (int i = 0; i < rounds * this.draftOrder.size(); i++) {
             Drafter drafter = this.draftOrder.remove();
             Player picked = drafter.draftPlayer(this.available, this.draftOrder, this.drafted);
@@ -39,5 +36,13 @@ public class Draft {
             this.draftOrder.add(drafter);
         }
         return true;
+    }
+
+    public Map<String, List<Player>> getDrafted() {
+        return this.drafted;
+    }
+
+    public Queue<Drafter> getDrafters() {
+        return this.draftOrder;
     }
 }

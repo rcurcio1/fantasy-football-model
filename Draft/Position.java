@@ -1,13 +1,15 @@
+package Draft;
 public enum Position {
     WR,
     RB,
     QB,
+    TE,
     K,
-    DEF;
+    D;
 
     public String toString() {
         switch(this) {
-            case DEF:
+            case D:
                 return "d";
             case K:
                 return "k";
@@ -17,6 +19,8 @@ public enum Position {
                 return "r";
             case WR:
                 return "w";
+            case TE:
+                return "t";
             default:
                 return "";
         }

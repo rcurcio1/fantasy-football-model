@@ -1,6 +1,9 @@
+package Draft;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
+import Strategy.DraftStrategy;
 
 public class Drafter {
     private final DraftStrategy strategy;
@@ -21,5 +24,9 @@ public class Drafter {
 
     public Player draftPlayer(List<Player> available, Queue<Drafter> draftOrder, Map<String, List<Player>> drafted) {
         return this.strategy.draftPlayer(this.name, available, null, drafted);
+    }
+
+    public void reset() {
+        this.strategy.reset();
     }
 }
