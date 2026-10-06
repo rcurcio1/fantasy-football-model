@@ -9,6 +9,7 @@ import Visitor.StrategyVisitor;
 public class SimpleDraftStrategy extends AbstractDraftStrategy {
     int Randomness;
 
+    // Creates a SimpleDraftStrategy given how random their drafting process should be
     public SimpleDraftStrategy(int randomness) {
         this.Randomness = randomness;
     }

@@ -5,6 +5,9 @@ import Draft.Position;
 
 import java.util.List;
 
+/*
+    Abstract DraftStrategy class that implements methods that are the same for all child classes
+*/
 public abstract class AbstractDraftStrategy implements DraftStrategy{
 
     @Override

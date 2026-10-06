@@ -8,7 +8,12 @@ import Draft.Player;
 import Draft.Position;
 import Visitor.StrategyVisitor;
 
-public class OGDraftStrategy extends AbstractDraftStrategy {
+/*
+    Strategy class that uses Q-Learning and knowledge of it's past draft picks to inform its next pick, 
+    continuing to train the algorithm by updating the Q-values throughout the draft
+*/
+
+public class RosterKnowledgeDraftStrategy extends AbstractDraftStrategy {
 
     Map<String, double[]> qValues;
     String filePath;
@@ -17,7 +22,9 @@ public class OGDraftStrategy extends AbstractDraftStrategy {
     double Epsilon;
     String state;
 
-    public OGDraftStrategy(Map<String, double[]> qValues, double gamma, double alpha, double epsilon) {
+    // Creates an instance of RosterKnowledgeDraftStrategy given the current Q-Values, and other hyperparameters
+    // that will be used to train the model
+    public RosterKnowledgeDraftStrategy(Map<String, double[]> qValues, double gamma, double alpha, double epsilon) {
         this.qValues = qValues;
         this.Gamma = gamma; //discount factor
         this.Alpha = alpha; //learning rate
@@ -52,6 +59,7 @@ public class OGDraftStrategy extends AbstractDraftStrategy {
         return drafting;
     }
 
+    // Uses the Q-Values to determine the best action given the new state
     private double getBestOfNextState(String newState) {
         double[] nextActionSpace = this.qValues.get(newState);
         if (nextActionSpace == null) {
@@ -62,6 +70,7 @@ public class OGDraftStrategy extends AbstractDraftStrategy {
         }
     }
 
+    // Converts integer to position
     private Position getPositionFromInt(int i) {
         switch(i) {
             case 0:
@@ -81,6 +90,7 @@ public class OGDraftStrategy extends AbstractDraftStrategy {
         }
     }
 
+    // Given the list of doubles representing the expected rewards, returns the index of the best reward
     private int getIndexOfBestAction(double[] options) {
         int index = 0;
         double max = options[0];
@@ -93,6 +103,7 @@ public class OGDraftStrategy extends AbstractDraftStrategy {
         return index;
     }
 
+    // Updates the state given the most recent position drafted
     private String getNextState(Position p) {
         String unsortedState = this.state + p.toString();
         char[] chars = unsortedState.toCharArray();

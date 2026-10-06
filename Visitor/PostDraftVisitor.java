@@ -1,6 +1,6 @@
 package Visitor;
 
-import Strategy.OGDraftStrategy;
+import Strategy.RosterKnowledgeDraftStrategy;
 import Strategy.SimpleDraftStrategy;
 
 public class PostDraftVisitor implements StrategyVisitor<Boolean> {
@@ -11,7 +11,7 @@ public class PostDraftVisitor implements StrategyVisitor<Boolean> {
     }
 
     @Override
-    public Boolean visit(OGDraftStrategy strategy) {
+    public Boolean visit(RosterKnowledgeDraftStrategy strategy) {
         return true;
     }    
 }

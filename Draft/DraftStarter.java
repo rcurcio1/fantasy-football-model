@@ -13,11 +13,14 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
-import Strategy.OGDraftStrategy;
+import Strategy.RosterKnowledgeDraftStrategy;
 import Strategy.SimpleDraftStrategy;
 import Visitor.PostDraftVisitor;
 import Visitor.StrategyVisitor;
 
+/*
+    Class for starting multiple drafts and training the model
+*/
 public class DraftStarter {
 
     private List<Player> initialAvailable;
@@ -27,6 +30,7 @@ public class DraftStarter {
     private boolean withTeamLogging;
     private List<Double> scoreLog;
     
+    // Create a draft starter using the file path for players and Q-Values, and whether you want to log
     public DraftStarter(String playerFilePath, String qValueFilePath, boolean withScoreLogging, boolean withTeamLogging) {
         this.initialAvailable = this.importPlayers(playerFilePath);
         this.qValues = this.populateQValues(qValueFilePath);
@@ -36,10 +40,11 @@ public class DraftStarter {
         this.scoreLog = new ArrayList<Double>();
     }
 
+    // Start epoch number of drafts
     public void start(int epoch) throws IOException {
         Queue<Drafter> draftOrder = new ArrayDeque<Drafter>();
         draftOrder.add(new Drafter(new SimpleDraftStrategy(20), "Ross"));
-        draftOrder.add(new Drafter(new OGDraftStrategy(this.qValues, 0.8, .25, 0), "Joe"));
+        draftOrder.add(new Drafter(new RosterKnowledgeDraftStrategy(this.qValues, 0.8, .25, 0), "Joe"));
         draftOrder.add(new Drafter(new SimpleDraftStrategy(20), "Caroline"));
 
         StrategyVisitor<Boolean> visitor = new PostDraftVisitor();
@@ -63,6 +68,7 @@ public class DraftStarter {
         this.tryLogScore();
     }
 
+    // Get the list of Player from the filepath to the players CSV
     private List<Player> importPlayers(String playersFileName) {
         List<Player> available = new ArrayList<Player>();
         File playersFile = new File(playersFileName);
@@ -87,6 +93,7 @@ public class DraftStarter {
         return available;
     }
 
+    // Create the map of String -> double[] representing the states and their Q-Values
     private Map<String, double[]> populateQValues(String filePath) {
         Map<String, double[]> qValues = new HashMap<String, double[]>();
         File playersFile = new File(filePath);
@@ -109,6 +116,7 @@ public class DraftStarter {
         return qValues;
     }
 
+    // Save the Q-Values after training the model
     private void exportQValues() {
         FileWriter myWriter;
         try {
@@ -128,6 +136,7 @@ public class DraftStarter {
         }
     }
 
+    // Create the String of Q-Values to be added to the CSV when exported
     private String optionsToString(double[] options) {
         StringBuilder sb = new StringBuilder();
         for (double d : options) {
@@ -136,6 +145,7 @@ public class DraftStarter {
         return sb.toString();
     }
 
+    // Log score to score.csv
     private void tryLogScore() {
         if (withScoreLogging) {
             FileWriter myWriter;
@@ -152,6 +162,7 @@ public class DraftStarter {
         }
     }
 
+    // Log team to team.log
     private void tryLogTeam(Drafter drafter, Draft draft) {
         if (withTeamLogging) {
             FileWriter myWriter;

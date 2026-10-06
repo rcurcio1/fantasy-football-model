@@ -1,4 +1,7 @@
 package Draft;
+/*
+    Position enum representing the six football positions in fantasy football
+*/
 public enum Position {
     WR,
     RB,
@@ -7,6 +10,7 @@ public enum Position {
     K,
     D;
 
+    // Return the one character long string representing this enum
     public String toString() {
         switch(this) {
             case D:
